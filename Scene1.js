@@ -31,11 +31,72 @@ class Scene1 extends Phaser.Scene {
         this.load.spritesheet("power-up", "./assets/spritesheets/power-up.png", {
             frameHeight: 16,
             frameWidth: 16
-        })
+        });
+
+        this.load.spritesheet("player", "./assets/spritesheets/player.png", {
+            frameWidth: 16,
+            frameHeight: 24
+        });
     }
 
     create() {
         this.add.text(20, 20, "Loading game...");
         this.scene.start("playGame");
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("ship"),
+            frameRate: 20,
+            key: "ship1_anim",
+            repeat: -1
+        });
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("ship2"),
+            frameRate: 20,
+            key: "ship2_anim",
+            repeat: -1
+        });
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("ship3"),
+            frameRate: 20,
+            key: "ship3_anim",
+            repeat: -1
+        });
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("explosion"),
+            frameRate: 20,
+            hideOnComplete: true,
+            key: "explode",
+            repeat: 0
+        });
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("power-up", {
+                start: 0,
+                end: 1
+            }),
+            frameRate: 20,
+            key: 'red',
+            repeat: -1
+        });
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("power-up", {
+                start:2,
+                end: 3
+            }),
+            frameRate: 20,
+            key: 'gray',
+            repeat: -1
+        });
+
+        this.anims.create({
+            frames: this.anims.generateFrameNumbers("player"),
+            frameRate: 20,
+            key: 'thrust',
+            repeat: -1
+        });
     }
 }

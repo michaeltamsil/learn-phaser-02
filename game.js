@@ -13,3 +13,7 @@ const config = {
     width: 256
 }
 const game = new Phaser.Game(config);
+
+const gameSettings = {
+    playerSpeed: 200
+}
