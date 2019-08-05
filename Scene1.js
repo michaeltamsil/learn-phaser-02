@@ -6,10 +6,27 @@ class Scene1 extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image("background", "./assets/images/background.png")
-        this.load.image("ship", "./assets/images/ship.png");
-        this.load.image("ship2", "./assets/images/ship2.png");
-        this.load.image("ship3", "./assets/images/ship3.png");
+        this.load.image("background", "./assets/images/background.png")        
+        
+        this.load.spritesheet("ship", "./assets/spritesheets/ship.png", {
+            frameHeight: 16,
+            frameWidth: 16
+        });
+        
+        this.load.spritesheet("ship2", "./assets/spritesheets/ship2.png", {
+            frameHeight: 16,
+            frameWidth: 32
+        })
+        
+        this.load.spritesheet("ship3", "./assets/spritesheets/ship3.png", {
+            frameHeight: 32,
+            frameWidth: 32
+        });
+
+        this.load.spritesheet("explosion", "assets/spritesheets/explosion.png", {
+            frameHeight: 16,
+            frameWidth: 16
+        })
     }
 
     create() {
