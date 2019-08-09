@@ -14,6 +14,11 @@ class Scene2 extends Phaser.Scene {
         this.ship2 = this.add.sprite(halfWidth, halfHeight, "ship2");
         this.ship3 = this.add.sprite(halfWidth + 50, halfHeight, "ship3");
 
+        this.enemies = this.physics.add.group();
+        this.enemies.add(this.ship1);
+        this.enemies.add(this.ship2);
+        this.enemies.add(this.ship3);
+
         this.ship1.play("ship1_anim");
         this.ship2.play("ship2_anim");
         this.ship3.play("ship3_anim");
@@ -55,6 +60,14 @@ class Scene2 extends Phaser.Scene {
 
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.projectiles = this.add.group();
+
+        this.physics.add.collider(this.projectiles, this.powerUps, function(projectile, powerUp){
+            projectile.destroy();
+        });
+
+        this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
+        this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
+        this.physics.add.overlap(this.projectiles, this.enemies, this.hitEnemy, null, this);
     }
 
     update() {
@@ -82,6 +95,18 @@ class Scene2 extends Phaser.Scene {
         gameObject.play("explode");
     }
 
+    hitEnemy(projectile, enemy) {
+        this.projectile.destroy();
+        this.resetShipPos(enemy);
+    }
+
+    hurtPlayer(player, enemy) {
+        this.resetShipPos(enemy);
+        player.x = config.width / 2 -8;
+        player.y = config.height - 64;
+
+    }
+
     movePlayerManager() {
         if (this.cursorKeys.left.isDown){
             this.player.setVelocityX(-gameSettings.playerSpeed);
@@ -105,6 +130,10 @@ class Scene2 extends Phaser.Scene {
         if (ship.y > config.height) {
             this.resetShipPos(ship);
         }
+    }
+
+    pickPowerUp(player, powerUp) {
+        powerUp.disableBody(true, true);
     }
 
     resetShipPos(ship) {
