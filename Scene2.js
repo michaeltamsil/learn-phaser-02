@@ -26,13 +26,22 @@ class Scene2 extends Phaser.Scene {
         this.ship1.setInteractive();
         this.ship2.setInteractive();
         this.ship3.setInteractive();
+
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0x000000, 1);
+        graphics.beginPath();
+        graphics.moveTo(0, 0);
+        graphics.lineTo(config.width, 0);
+        graphics.lineTo(config.width, 20);
+        graphics.lineTo(0, 20);
+        graphics.closePath();
+        graphics.fillPath();
+
+        this.score = 0;
  
         this.input.on('gameobjectdown',this.destroyShip , this);
      
-        this.add.text(20, 20, "Playing game", {
-            fill: "yellow",
-            font: "25px Arial"
-        });
+        this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
 
         this.powerUps = this.physics.add.group();
 
@@ -96,8 +105,12 @@ class Scene2 extends Phaser.Scene {
     }
 
     hitEnemy(projectile, enemy) {
-        this.projectile.destroy();
+        projectile.destroy();
         this.resetShipPos(enemy);
+        
+        this.score += 15;
+        const scoreFormated = this.zeroPad(this.score, 6);
+        this.scoreLabel.text = "SCORE " + scoreFormated;
     }
 
     hurtPlayer(player, enemy) {
@@ -145,5 +158,13 @@ class Scene2 extends Phaser.Scene {
     shootBeam(){
         // const beam = this.physics.add.sprite(this.player.x, this.player.y, "beam");
         const beam = new Beam(this)
+    }
+
+    zeroPad(number, size) {
+        let stringNumber = String(number);
+        while (stringNumber.length < (size || 2)) {
+            stringNumber = "0" + stringNumber;
+        }
+        return stringNumber;
     }
 }
