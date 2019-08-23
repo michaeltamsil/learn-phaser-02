@@ -42,6 +42,9 @@ class Scene2 extends Phaser.Scene {
         this.input.on('gameobjectdown',this.destroyShip , this);
      
         this.scoreLabel = this.add.bitmapText(10, 5, "pixelFont", "SCORE ", 16);
+        this.beamSound = this.sound.add("audio_beam");
+        this.explosionSound = this.sound.add("audio_explosion");
+        this.pickupSound = this.sound.add("audio_pickup");
 
         this.powerUps = this.physics.add.group();
 
@@ -77,6 +80,20 @@ class Scene2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.powerUps, this.pickPowerUp, null, this);
         this.physics.add.overlap(this.player, this.enemies, this.hurtPlayer, null, this);
         this.physics.add.overlap(this.projectiles, this.enemies, this.hitEnemy, null, this);
+
+        this.music = this.sound.add("music");
+
+        var musicConfig = {
+            delay: 0,
+            detune: 0,
+            loop: false,
+            mute: false,
+            rate: 1,
+            seek: 0,
+            volume: 0.5
+        }
+
+        this.music.play(musicConfig);
     }
 
     update() {
@@ -107,6 +124,7 @@ class Scene2 extends Phaser.Scene {
 
     hitEnemy(projectile, enemy) {
         let explosion = new Explosion(this , enemy.x, enemy.y);
+        this.explosionSound.play();
 
         projectile.destroy();
         this.resetShipPos(enemy);
@@ -125,6 +143,8 @@ class Scene2 extends Phaser.Scene {
             return;
         }
         var explosion = new Explosion(this, player.x, player.y);
+        this.explosionSound.play();
+        
         player.disableBody(true, true);
         this.time.addEvent({
             delay: 1000,
@@ -165,6 +185,7 @@ class Scene2 extends Phaser.Scene {
 
     pickPowerUp(player, powerUp) {
         powerUp.disableBody(true, true);
+        this.pickupSound.play();
     }
 
     resetPlayer(){
@@ -195,6 +216,7 @@ class Scene2 extends Phaser.Scene {
     shootBeam(){
         // const beam = this.physics.add.sprite(this.player.x, this.player.y, "beam");
         const beam = new Beam(this)
+        this.beamSound.play();
     }
 
     zeroPad(number, size) {
